@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legal
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: legal
+  template:
+    metadata:
+      labels:
+        app: legal
+    spec:
+      imagePullSecrets:
+        - name: pikol-pull-secret
+      containers:
+        - name: legal
+          image: ghcr.io/pikol-app/legal:0.6.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              memory: 100Mi
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
