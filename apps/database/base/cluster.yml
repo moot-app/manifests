@@ -1,0 +1,33 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster-postgres
+spec:
+  instances: 1
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "256MB"
+      effective_cache_size: "1GB"
+  storage:
+    size: 8Gi
+    storageClass: xdew-storage
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  managed:
+    roles:
+      - name: keycloak-user
+        login: true
+        superuser: false
+        passwordSecret:
+          name: keycloak-db-credentials
+      - name: api-user
+        login: true
+        superuser: true
+        passwordSecret:
+          name: api-db-credentials
