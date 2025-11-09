@@ -17,7 +17,7 @@ patches:
         value: static.pikol.app
   - target:
       kind: Deployment
-      name: legal
+      name: static
     patch: |-
       - op: replace
         path: /spec/replicas
