@@ -10,5 +10,5 @@ patches:
       name: cluster-postgres
     patch: |-
       - op: replace
-        path: /spec/replicas
+        path: /spec/instances
         value: 1
