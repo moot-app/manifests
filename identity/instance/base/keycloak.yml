@@ -47,7 +47,7 @@ spec:
               - name: QUARKUS_HTTP_HTTP2
                 value: "false"
               - name: KC_HOSTNAME
-                value: "https://auth.piko.app"
+                value: "https://auth.pikol.app"
               - name: KC_BOOTSTRAP_ADMIN_USERNAME
                 valueFrom:
                   secretKeyRef:
