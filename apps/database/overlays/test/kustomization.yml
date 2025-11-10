@@ -7,7 +7,7 @@ resources:
 patches:
   - target:
       kind: Cluster
-      name: cluster-postgres
+      name: postgres-cluster
     patch: |-
       - op: replace
         path: /spec/instances

@@ -4,7 +4,7 @@ metadata:
   name: keycloak-db
 spec:
   cluster:
-    name: cluster-postgres
+    name: postgres-cluster
   name: keycloak-db
   owner: keycloak-user
 ---
@@ -14,6 +14,6 @@ metadata:
   name: api-db
 spec:
   cluster:
-    name: cluster-postgres
+    name: postgres-cluster
   name: api-db
   owner: api-user
