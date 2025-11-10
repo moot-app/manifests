@@ -26,8 +26,10 @@ spec:
         superuser: false
         passwordSecret:
           name: keycloak-db-credentials
+          key: password
       - name: api-user
         login: true
         superuser: true
         passwordSecret:
           name: api-db-credentials
+          key: password
