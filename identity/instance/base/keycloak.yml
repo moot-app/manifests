@@ -1,0 +1,60 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  instances: 1
+  image: "ghcr.io/xdew-studio/keycloak:26.3.4-2.3.4"
+  imagePullSecrets:
+    - name: "xdew-pull-secret"
+  db:
+    vendor: postgres
+    host: keycloak-postgres-rw
+    usernameSecret:
+      name: keycloak-db-credentials
+      key: username
+    passwordSecret:
+      name: keycloak-db-credentials
+      key: password
+    database: keycloak-db
+  hostname:
+    hostname: auth.piko.app
+  http:
+    httpEnabled: false
+    tlsSecret: keycloak-tls
+  proxy:
+    headers: xforwarded
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 1Gi
+  unsupported:
+    podTemplate:
+      spec:
+        containers:
+          - name: keycloak
+            env:
+              - name: KC_HTTP_ENABLED
+                value: "false"
+              - name: KC_PROXY_HEADERS
+                value: "xforwarded"
+              - name: QUARKUS_HTTP_HTTP2
+                value: "false"
+              - name: KC_HOSTNAME
+                value: "https://auth.piko.app"
+              - name: KC_BOOTSTRAP_ADMIN_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: keycloak-admin-credentials
+                    key: username
+              - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: keycloak-admin-credentials
+                    key: password
