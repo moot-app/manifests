@@ -24,12 +24,12 @@ spec:
       - name: keycloak-user
         login: true
         superuser: false
+        ensure: present
         passwordSecret:
           name: keycloak-db-credentials
-          key: password
       - name: api-user
         login: true
-        superuser: true
+        superuser: false
+        ensure: present
         passwordSecret:
           name: api-db-credentials
-          key: password
