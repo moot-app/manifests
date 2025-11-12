@@ -54,6 +54,7 @@ jobs:
           valueFile: /apps/${{ env.IMAGE_NAME }}/overlays/test/kustomization.yml
           repository: pikol-app/
           message: "[auto] update TEST ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
+          branch: main
           changes: |
             {
               "configMapGenerator[0].literals[?(@=~'image=.*')]": "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
@@ -97,6 +98,7 @@ jobs:
           valueFile: /apps/${{ env.IMAGE_NAME }}/overlays/prod/kustomization.yml
           repository: pikol-app/
           message: "[auto] update PROD ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
+          branch: main
           changes: |
             {
               "configMapGenerator[0].literals[?(@=~'image=.*')]": "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
