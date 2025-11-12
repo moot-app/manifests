@@ -1,0 +1,106 @@
+name: "Reusable CI for OS4"
+
+env:
+  MANIFESTS_REPO: ${{ github.repository_owner }}/manifests
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "Version"
+        required: false
+        type: string
+        default: "latest"
+    secrets:
+      GH_APP_ID:
+        description: "GitHub App ID for generating tokens"
+        required: true
+      GH_PRIVATE_KEY:
+        description: "GitHub App private key for generating tokens"
+        required: true
+
+jobs:
+  deploy-test:
+    name: Deploy to TEST
+    runs-on: ubuntu-latest
+    environment: Test
+    env:
+      IMAGE_NAME: ${{ github.event.repository.name }}
+
+    steps:
+      - name: Generate GitHub App token
+        id: generate_gh_app_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_PRIVATE_KEY }}
+          owner: pikol-app
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ steps.generate_gh_app_token.outputs.token }}
+
+      - name: Checkout to manifests repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.MANIFESTS_REPO }}
+          token: ${{ steps.generate_gh_app_token.outputs.token }}
+
+      - name: Update image version in config repo
+        uses: fjogeleit/yaml-update-action@v0.13.2
+        with:
+          valueFile: /apps/${{ env.IMAGE_NAME }}/overlays/test/kustomization.yml
+          repository: pikol-app/
+          message: "[auto] update TEST ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
+          changes: |
+            {
+              "configMapGenerator[0].literals[?(@=~'image=.*')]": "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
+            }
+          commitChange: true
+          commitUserName: ${{ github.actor }}
+          token: ${{ steps.generate_gh_app_token.outputs.token }}
+
+  deploy-prod:
+    name: Deploy to PROD
+    needs: [deploy-test]
+    runs-on: ubuntu-latest
+    environment: Production
+    env:
+      IMAGE_NAME: ${{ github.event.repository.name }}
+
+    steps:
+      - name: Generate GitHub App token
+        id: generate_gh_app_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_PRIVATE_KEY }}
+          owner: pikol-app
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ steps.generate_gh_app_token.outputs.token }}
+
+      - name: Checkout to manifests repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.MANIFESTS_REPO }}
+          token: ${{ steps.generate_gh_app_token.outputs.token }}
+
+      - name: Update image version in config repo
+        uses: fjogeleit/yaml-update-action@v0.13.2
+        with:
+          valueFile: /apps/${{ env.IMAGE_NAME }}/overlays/prod/kustomization.yml
+          repository: pikol-app/
+          message: "[auto] update PROD ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
+          changes: |
+            {
+              "configMapGenerator[0].literals[?(@=~'image=.*')]": "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
+            }
+          commitChange: true
+          commitUserName: ${{ github.actor }}
+          token: ${{ steps.generate_gh_app_token.outputs.token }}
