@@ -48,22 +48,18 @@ jobs:
           repository: ${{ env.MANIFESTS_REPO }}
           token: ${{ steps.generate_gh_app_token.outputs.token }}
 
-      - name: Update image version in config repo
-        uses: fjogeleit/yaml-update-action@v0.13.2
-        with:
-          valueFile: apps/${{ env.IMAGE_NAME }}/overlays/test/kustomization.yml
-          repository: ${{ env.MANIFESTS_REPO }}
-          message: "[auto] update TEST ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
-          branch: main
-          masterBranchName: main
-          targetBranch: main
-          changes: |
-            {
-              "configMapGenerator[0].literals[?(@=~'image=.*')]": "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
-            }
-          commitChange: true
-          commitUserName: ${{ github.actor }}
-          token: ${{ steps.generate_gh_app_token.outputs.token }}
+      - name: Update image version in kustomization
+        run: |
+          yq eval '.configMapGenerator[0].literals[1] = "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"' \
+            -i apps/${{ env.IMAGE_NAME }}/overlays/test/kustomization.yml
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add apps/${{ env.IMAGE_NAME }}/overlays/test/kustomization.yml
+          git commit -m "[auto] update TEST ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
+          git push
 
   deploy-prod:
     name: PROD
@@ -94,19 +90,15 @@ jobs:
           repository: ${{ env.MANIFESTS_REPO }}
           token: ${{ steps.generate_gh_app_token.outputs.token }}
 
-      - name: Update image version in config repo
-        uses: fjogeleit/yaml-update-action@v0.13.2
-        with:
-          valueFile: apps/${{ env.IMAGE_NAME }}/overlays/prod/kustomization.yml
-          repository: ${{ env.MANIFESTS_REPO }}
-          message: "[auto] update PROD ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
-          branch: main
-          masterBranchName: main
-          targetBranch: main
-          changes: |
-            {
-              "configMapGenerator[0].literals[?(@=~'image=.*')]": "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"
-            }
-          commitChange: true
-          commitUserName: ${{ github.actor }}
-          token: ${{ steps.generate_gh_app_token.outputs.token }}
+      - name: Update image version in kustomization
+        run: |
+          yq eval '.configMapGenerator[0].literals[1] = "image=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}"' \
+            -i apps/${{ env.IMAGE_NAME }}/overlays/prod/kustomization.yml
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add apps/${{ env.IMAGE_NAME }}/overlays/prod/kustomization.yml
+          git commit -m "[auto] update PROD ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
+          git push
