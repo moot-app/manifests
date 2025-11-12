@@ -1,17 +1,33 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+configMapGenerator:
+  - name: config-vars
+    literals:
+      - instances=2
+      - storage_size=8Gi
+
 resources:
   - ../../base
 
-patches:
-  - target:
-      kind: Cluster
-      name: postgres-cluster
-    patch: |-
-      - op: replace
-        path: /spec/instances
-        value: 2
-      - op: replace
-        path: /spec/storage/size
-        value: 8Gi
+replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.instances
+    targets:
+      - select:
+          kind: Cluster
+          name: postgres-cluster
+        fieldPaths:
+          - spec.instances
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.storage_size
+    targets:
+      - select:
+          kind: Cluster
+          name: postgres-cluster
+        fieldPaths:
+          - spec.storage.size

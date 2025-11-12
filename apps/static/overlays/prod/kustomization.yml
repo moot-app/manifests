@@ -1,24 +1,34 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+configMapGenerator:
+  - name: config-vars
+    literals:
+      - host=static.pikol.app
+      - replicas=2
+
 resources:
   - ../../base
 
-patches:
-  - target:
-      kind: Ingress
-      name: static
-    patch: |-
-      - op: replace
-        path: /spec/rules/0/host
-        value: static.pikol.app
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: static.pikol.app
-  - target:
-      kind: Deployment
-      name: static
-    patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 2
+replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.host
+    targets:
+      - select:
+          kind: Ingress
+          name: static
+        fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: static
+        fieldPaths:
+          - spec.replicas

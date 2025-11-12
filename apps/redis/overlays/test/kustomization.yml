@@ -1,14 +1,22 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+configMapGenerator:
+  - name: config-vars
+    literals:
+      - replicas=1
+
 resources:
   - ../../base
 
-patches:
-  - target:
-      kind: Deployment
-      name: redis
-    patch: |-
-      - op: replace
-        path: /spec/replicas
-        value: 1
+replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: redis
+        fieldPaths:
+          - spec.replicas
