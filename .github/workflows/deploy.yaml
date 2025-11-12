@@ -52,7 +52,7 @@ jobs:
         uses: fjogeleit/yaml-update-action@v0.13.2
         with:
           valueFile: /apps/${{ env.IMAGE_NAME }}/overlays/test/kustomization.yml
-          repository: pikol-app/
+          repository: ${{ env.MANIFESTS_REPO }}
           message: "[auto] update TEST ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
           branch: main
           changes: |
@@ -67,7 +67,7 @@ jobs:
     name: PROD
     needs: [deploy-test]
     runs-on: ubuntu-latest
-    environment: Production
+    environment: Prod
     env:
       IMAGE_NAME: ${{ github.event.repository.name }}
 
@@ -96,7 +96,7 @@ jobs:
         uses: fjogeleit/yaml-update-action@v0.13.2
         with:
           valueFile: /apps/${{ env.IMAGE_NAME }}/overlays/prod/kustomization.yml
-          repository: pikol-app/
+          repository: ${{ env.MANIFESTS_REPO }}
           message: "[auto] update PROD ${{ env.IMAGE_NAME }} image version to ${{ inputs.version }}"
           branch: main
           changes: |
