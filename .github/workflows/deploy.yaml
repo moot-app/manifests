@@ -21,7 +21,7 @@ on:
 
 jobs:
   deploy-test:
-    name: Deploy to TEST
+    name: TEST
     runs-on: ubuntu-latest
     environment: Test
     env:
@@ -63,7 +63,7 @@ jobs:
           token: ${{ steps.generate_gh_app_token.outputs.token }}
 
   deploy-prod:
-    name: Deploy to PROD
+    name: PROD
     needs: [deploy-test]
     runs-on: ubuntu-latest
     environment: Production
