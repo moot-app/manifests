@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
 
+version: 0.16.2
+
 patches:
   - target:
       kind: Deployment
@@ -12,6 +14,9 @@ patches:
       - op: replace
         path: /spec/replicas
         value: 1
+      - op: replace
+        path: /spec/containers/0/image
+        value: ghcr.io/pikol-app/api:$(version)
   - target:
       kind: Ingress
       name: api
