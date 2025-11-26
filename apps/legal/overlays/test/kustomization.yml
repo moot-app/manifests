@@ -3,11 +3,32 @@ kind: Kustomization
 configMapGenerator:
   - name: config-vars
     literals:
-      - host=legal-test.pikol.app
-      - image=ghcr.io/pikol-app/legal:0.7.0
+      - replicas=1
+      - image=ghcr.io/pikol-app/legla:0.7.0
+      - host=legal.pikol.app
 resources:
   - ../../base
 replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: api
+        fieldPaths:
+          - spec.replicas
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: api
+        fieldPaths:
+          - spec.template.spec.containers.0.image
   - source:
       kind: ConfigMap
       name: config-vars
@@ -15,7 +36,7 @@ replacements:
     targets:
       - select:
           kind: Ingress
-          name: legal
+          name: api
         fieldPaths:
           - spec.rules.0.host
           - spec.tls.0.hosts.0
