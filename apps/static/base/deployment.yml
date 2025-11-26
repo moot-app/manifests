@@ -18,7 +18,7 @@ spec:
         - name: pikol-pull-secret
       containers:
         - name: static
-          image: ghcr.io/pikol-app/static:1.3.0
+          image: ghcr.io/pikol-app/static:1.4.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
