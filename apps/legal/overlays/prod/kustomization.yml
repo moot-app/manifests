@@ -16,7 +16,7 @@ replacements:
     targets:
       - select:
           kind: Deployment
-          name: api
+          name: legal
         fieldPaths:
           - spec.replicas
   - source:
@@ -26,7 +26,7 @@ replacements:
     targets:
       - select:
           kind: Deployment
-          name: api
+          name: legal
         fieldPaths:
           - spec.template.spec.containers.0.image
   - source:
@@ -36,7 +36,7 @@ replacements:
     targets:
       - select:
           kind: Ingress
-          name: api
+          name: legal
         fieldPaths:
           - spec.rules.0.host
           - spec.tls.0.hosts.0
