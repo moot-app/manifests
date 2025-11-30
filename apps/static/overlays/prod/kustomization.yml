@@ -1,15 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 configMapGenerator:
   - name: config-vars
     literals:
       - host=static.pikol.app
-      - replicas=2
-
+      - image=ghcr.io/pikol-app/static:1.6.1
 resources:
   - ../../base
-
 replacements:
   - source:
       kind: ConfigMap
