@@ -23,6 +23,16 @@ replacements:
   - source:
       kind: ConfigMap
       name: config-vars
+      fieldPath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: static
+        fieldPaths:
+          - spec.template.spec.containers.0.image
+  - source:
+      kind: ConfigMap
+      name: config-vars
       fieldPath: data.replicas
     targets:
       - select:

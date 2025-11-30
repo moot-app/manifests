@@ -20,3 +20,23 @@ replacements:
         fieldPaths:
           - spec.rules.0.host
           - spec.tls.0.hosts.0
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: static
+        fieldPaths:
+          - spec.template.spec.containers.0.image
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: static
+        fieldPaths:
+          - spec.replicas
