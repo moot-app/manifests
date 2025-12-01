@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+  - name: config-vars
+    literals:
+      - replicas=1
+      - image=ghcr.io/pikol-app/uploads:0.1.0
+      - host=uploads-test.pikol.app
+      - size=2Gi
+resources:
+  - ../../base
+replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: uploads
+        fieldPaths:
+          - spec.replicas
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: uploads
+        fieldPaths:
+          - spec.template.spec.containers.0.image
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.host
+    targets:
+      - select:
+          kind: Ingress
+          name: uploads
+        fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.size
+    targets:
+      - select:
+          kind: PersistentVolumeClaim
+          name: uploads
+        fieldPaths:
+          - spec.resources.requests.storage
