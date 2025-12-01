@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads
+spec:
+  resources:
+    requests:
+      storage: xx
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
