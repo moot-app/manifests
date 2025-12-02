@@ -5,7 +5,7 @@ configMapGenerator:
     literals:
       - host=static.pikol.app
       - image=ghcr.io/pikol-app/static:1.6.1
-      - replicas=2
+      - replicas=1
 resources:
   - ../../base
 replacements:
