@@ -4,7 +4,7 @@ configMapGenerator:
   - name: config-vars
     literals:
       - replicas=1
-      - image=ghcr.io/pikol-app/join:1.0.0
+      - image=ghcr.io/pikol-app/join:1.0.1
       - host=join.pikol.app
 resources:
   - ../../base
