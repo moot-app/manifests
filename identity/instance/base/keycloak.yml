@@ -6,7 +6,7 @@ metadata:
     app: keycloak
 spec:
   instances: 1
-  image: "ghcr.io/xdew-studio/keycloak:26.3.4-2.3.4"
+  image: "ghcr.io/xdew-studio/keycloak:26.3.4-2.3.5"
   imagePullSecrets:
     - name: "pikol-pull-secret"
   db:
