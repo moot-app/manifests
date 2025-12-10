@@ -5,3 +5,5 @@ resources:
   - deployment.yml
   - ingress.yml
   - service.yml
+  - vpa.yml
+  - pdb.yml

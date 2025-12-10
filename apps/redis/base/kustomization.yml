@@ -4,3 +4,5 @@ kind: Kustomization
 resources:
   - deployment.yml
   - service.yml
+  - vpa.yml
+  - pdb.yml
