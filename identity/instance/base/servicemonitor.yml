@@ -13,3 +13,5 @@ spec:
       path: /metrics
       scheme: https
       interval: 30s
+      tlsConfig:
+        insecureSkipVerify: true 
