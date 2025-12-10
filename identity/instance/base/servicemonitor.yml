@@ -11,5 +11,5 @@ spec:
   endpoints:
     - port: management
       path: /metrics
-      scheme: http
+      scheme: https
       interval: 30s
