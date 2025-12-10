@@ -6,7 +6,7 @@ metadata:
     app: keycloak
 spec:
   instances: 1
-  image: "ghcr.io/xdew-studio/keycloak:26.3.4-2.3.5"
+  image: "ghcr.io/xdew-studio/keycloak:26.3.4-2.3.6"
   imagePullSecrets:
     - name: "pikol-pull-secret"
   db:
@@ -34,11 +34,6 @@ spec:
       memory: 512Mi
     limits:
       memory: 1Gi
-  additionalOptions:
-    - name: metrics-enabled
-      value: "true"
-    - name: health-enabled
-      value: "true"
   unsupported:
     podTemplate:
       spec:
