@@ -34,6 +34,11 @@ spec:
       memory: 512Mi
     limits:
       memory: 1Gi
+  additionalOptions:
+    - name: metrics-enabled
+      value: "true"
+    - name: health-enabled
+      value: "true"
   unsupported:
     podTemplate:
       spec:
@@ -48,10 +53,6 @@ spec:
                 value: "false"
               - name: KC_HOSTNAME
                 value: "https://auth.pikol.app"
-              - name: KC_METRICS_ENABLED
-                value: "true"
-              - name: KC_HEALTH_ENABLED
-                value: "true"
               - name: KC_BOOTSTRAP_ADMIN_USERNAME
                 valueFrom:
                   secretKeyRef:
