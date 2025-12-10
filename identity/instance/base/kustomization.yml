@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - keycloak.yml
   - keycloak-ingress.yml
+  - servicemonitor.yml
