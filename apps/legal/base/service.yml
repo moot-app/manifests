@@ -6,7 +6,7 @@ spec:
   selector:
     app: legal
   ports:
-    - name: legal-svc-port
+    - name: web
       protocol: TCP
       port: 80
       targetPort: 3000

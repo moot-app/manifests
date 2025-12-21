@@ -6,7 +6,7 @@ spec:
   selector:
     app: redis
   ports:
-    - name: redis-svc-port
+    - name: redis
       protocol: TCP
       port: 6379
       targetPort: 6379
