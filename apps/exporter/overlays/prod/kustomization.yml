@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+  - name: config-vars
+    literals:
+      - replicas=2
+      - image=ghcr.io/pikol-app/exporter:0.0.0
+resources:
+  - ../../base
+replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: exporter
+        fieldPaths:
+          - spec.replicas
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: exporter
+        fieldPaths:
+          - spec.template.spec.containers.0.image
