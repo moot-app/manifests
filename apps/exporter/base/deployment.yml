@@ -21,7 +21,8 @@ spec:
           image: ghcr.io/pikol-app/exporter:x.x.x
           imagePullPolicy: Always
           ports:
-            - containerPort: 5987
+            - name: web
+              containerPort: 5987
           envFrom:
             - secretRef:
                 name: exporter-secrets

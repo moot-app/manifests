@@ -6,3 +6,4 @@ resources:
   - service.yml
   - vpa.yml
   - pdb.yml
+  - monitor.yml
