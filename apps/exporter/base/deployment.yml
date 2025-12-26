@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exporter
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: exporter
+  template:
+    metadata:
+      labels:
+        app: exporter
+    spec:
+      imagePullSecrets:
+        - name: pikol-pull-secret
+      containers:
+        - name: exporter
+          image: ghcr.io/pikol-app/exporter:x.x.x
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5987
+          envFrom:
+            - secretRef:
+                name: exporter-secrets
+          resources:
+            requests:
+              cpu: 10m
+              memory: 100Mi
+            limits:
+              memory: 250Mi
+          livenessProbe:
+            tcpSocket:
+              port: 5987
+            initialDelaySeconds: 15
+            timeoutSeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            tcpSocket:
+              port: 5987
+            initialDelaySeconds: 15
+            timeoutSeconds: 10
+            periodSeconds: 10
