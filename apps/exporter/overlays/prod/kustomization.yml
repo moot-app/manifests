@@ -3,7 +3,7 @@ kind: Kustomization
 configMapGenerator:
   - name: config-vars
     literals:
-      - replicas=2
+      - replicas=1
       - image=ghcr.io/pikol-app/exporter:1.0.0
 resources:
   - ../../base
