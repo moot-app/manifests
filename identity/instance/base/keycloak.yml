@@ -30,10 +30,11 @@ spec:
     enabled: false
   resources:
     requests:
-      cpu: 100m
-      memory: 512Mi
-    limits:
+      cpu: 500m
       memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
   additionalOptions:
     - name: db-pool-initial-size
       value: "5"
@@ -59,20 +60,26 @@ spec:
                 value: "https://auth.pikol.app"
               - name: JAVA_OPTS_APPEND
                 value: >-
-                  -Xms512m
-                  -Xmx768m
-                  -XX:MetaspaceSize=96M
-                  -XX:MaxMetaspaceSize=256m
+                  -Xms1024m
+                  -Xmx1536m
+                  -XX:MetaspaceSize=128M
+                  -XX:MaxMetaspaceSize=384m
                   -XX:+UseG1GC
                   -XX:MaxGCPauseMillis=100
                   -XX:+ParallelRefProcEnabled
-                  -XX:MaxRAMPercentage=75.0
+                  -XX:+DisableExplicitGC
+                  -XX:+HeapDumpOnOutOfMemoryError
+                  -XX:HeapDumpPath=/tmp/heap-dump.hprof
                   -Djava.net.preferIPv4Stack=true
                   -Djboss.modules.system.pkgs=org.jboss.byteman
               - name: QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY
                 value: "false"
               - name: KC_HTTP_POOL_MAX_THREADS
                 value: "50"
+              - name: KC_CACHE
+                value: "ispn"
+              - name: KC_CACHE_STACK
+                value: "kubernetes"
               - name: KC_BOOTSTRAP_ADMIN_USERNAME
                 valueFrom:
                   secretKeyRef:
