@@ -35,10 +35,6 @@ spec:
     limits:
       memory: 1Gi
   additionalOptions:
-    - name: cache
-      value: "ispn"
-    - name: cache-stack
-      value: "kubernetes"
     - name: db-pool-initial-size
       value: "5"
     - name: db-pool-max-size
