@@ -34,6 +34,19 @@ spec:
       memory: 512Mi
     limits:
       memory: 1Gi
+  additionalOptions:
+    - name: cache
+      value: "ispn"
+    - name: cache-stack
+      value: "kubernetes"
+    - name: db-pool-initial-size
+      value: "5"
+    - name: db-pool-max-size
+      value: "20"
+    - name: db-pool-min-size
+      value: "5"
+    - name: log-level
+      value: "INFO"
   unsupported:
     podTemplate:
       spec:
@@ -48,6 +61,22 @@ spec:
                 value: "false"
               - name: KC_HOSTNAME
                 value: "https://auth.pikol.app"
+              - name: JAVA_OPTS_APPEND
+                value: >-
+                  -Xms512m
+                  -Xmx768m
+                  -XX:MetaspaceSize=96M
+                  -XX:MaxMetaspaceSize=256m
+                  -XX:+UseG1GC
+                  -XX:MaxGCPauseMillis=100
+                  -XX:+ParallelRefProcEnabled
+                  -XX:MaxRAMPercentage=75.0
+                  -Djava.net.preferIPv4Stack=true
+                  -Djboss.modules.system.pkgs=org.jboss.byteman
+              - name: QUARKUS_TRANSACTION_MANAGER_ENABLE_RECOVERY
+                value: "false"
+              - name: KC_HTTP_POOL_MAX_THREADS
+                value: "50"
               - name: KC_BOOTSTRAP_ADMIN_USERNAME
                 valueFrom:
                   secretKeyRef:
