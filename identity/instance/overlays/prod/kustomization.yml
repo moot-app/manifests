@@ -4,7 +4,7 @@ kind: Kustomization
 configMapGenerator:
   - name: config-vars
     literals:
-      - instances=1
+      - instances=2
 
 resources:
   - ../../base
