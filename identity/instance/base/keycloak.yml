@@ -44,6 +44,8 @@ spec:
       value: "5"
     - name: log-level
       value: "INFO"
+    - name: cache
+      value: "local"
   unsupported:
     podTemplate:
       spec:
@@ -76,10 +78,6 @@ spec:
                 value: "false"
               - name: KC_HTTP_POOL_MAX_THREADS
                 value: "50"
-              - name: KC_CACHE
-                value: "ispn"
-              - name: KC_CACHE_STACK
-                value: "kubernetes"
               - name: KC_BOOTSTRAP_ADMIN_USERNAME
                 valueFrom:
                   secretKeyRef:
