@@ -14,9 +14,11 @@ spec:
       labels:
         app: redis
     spec:
+      imagePullSecrets:
+        - name: pikol-pull-secret
       containers:
         - name: redis
-          image: redis:8.2.3-alpine
+          image: ghcr.io/pikol-app/redis:8.2.3
           imagePullPolicy: Always
           ports:
             - containerPort: 6379
