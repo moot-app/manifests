@@ -18,7 +18,7 @@ spec:
         - name: pikol-pull-secret
       containers:
         - name: join
-          image: ghcr.io/pikol-app/join:x.x.x
+          image: ghcr.io/moot-app/join:x.x.x
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

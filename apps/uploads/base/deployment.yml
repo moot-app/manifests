@@ -18,7 +18,7 @@ spec:
         - name: pikol-pull-secret
       containers:
         - name: uploads
-          image: ghcr.io/pikol-app/uploads:x.x.x
+          image: ghcr.io/moot-app/uploads:x.x.x
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

@@ -18,7 +18,7 @@ spec:
         - name: pikol-pull-secret
       containers:
         - name: redis
-          image: ghcr.io/pikol-app/redis:8.4.0
+          image: ghcr.io/moot-app/redis:8.4.0
           imagePullPolicy: Always
           ports:
             - containerPort: 6379

@@ -18,7 +18,7 @@ spec:
         - name: pikol-pull-secret
       containers:
         - name: exporter
-          image: ghcr.io/pikol-app/exporter:x.x.x
+          image: ghcr.io/moot-app/exporter:x.x.x
           imagePullPolicy: Always
           ports:
             - name: web

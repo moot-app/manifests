@@ -6,7 +6,7 @@ metadata:
     app: keycloak
 spec:
   instances: 1
-  image: "ghcr.io/pikol-app/identity:1.0.2"
+  image: "ghcr.io/moot-app/identity:1.0.2"
   imagePullSecrets:
     - name: "pikol-pull-secret"
   db:
