@@ -5,7 +5,7 @@ configMapGenerator:
     literals:
       - replicas=1
       - image=ghcr.io/moot-app/share:0.6.2
-      - host=share.pikol.app
+      - host=share.moot.li
 resources:
   - ../../base
 replacements:

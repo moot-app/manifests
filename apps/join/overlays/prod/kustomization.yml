@@ -4,8 +4,8 @@ configMapGenerator:
   - name: config-vars
     literals:
       - replicas=1
+      - host=join.moot.li
       - image=ghcr.io/moot-app/join:1.1.0
-      - host=join.pikol.app
 resources:
   - ../../base
 replacements:
