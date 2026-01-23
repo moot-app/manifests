@@ -4,7 +4,7 @@ configMapGenerator:
   - name: config-vars
     literals:
       - replicas=1
-      - image=ghcr.io/moot-app/share:0.7.0
+      - image=ghcr.io/moot-app/share:0.7.1
       - host=share.moot.li
 resources:
   - ../../base
