@@ -4,7 +4,7 @@ configMapGenerator:
   - name: config-vars
     literals:
       - replicas=2
-      - image=ghcr.io/moot-app/api:0.38.0
+      - image=ghcr.io/moot-app/api:0.38.1
       - host=api.pikol.app
 resources:
   - ../../base
