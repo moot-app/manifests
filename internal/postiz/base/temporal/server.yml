@@ -23,6 +23,7 @@ spec:
         app.kubernetes.io/component: temporal
         app.kubernetes.io/part-of: postiz
     spec:
+      enableServiceLinks: false
       containers:
         - name: temporal
           image: temporalio/auto-setup:1.28.1
