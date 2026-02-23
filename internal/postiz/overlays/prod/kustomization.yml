@@ -4,7 +4,7 @@ namespace: evtzp-internal
 configMapGenerator:
   - name: config-vars
     literals:
-      - replicas=2
+      - replicas=1
       - image=ghcr.io/gitroomhq/postiz-app:latest
       - host=social.moot.li
       - frontend_url=https://social.moot.li
