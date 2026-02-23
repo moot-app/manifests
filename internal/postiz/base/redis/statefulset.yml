@@ -26,7 +26,7 @@ spec:
         app.kubernetes.io/part-of: postiz
     spec:
       securityContext:
-        fsGroup: 1001
+        fsGroup: 999
         fsGroupChangePolicy: Always
       serviceAccountName: postiz-redis
       automountServiceAccountToken: false
@@ -41,32 +41,23 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-            runAsGroup: 1001
+            runAsGroup: 999
             runAsNonRoot: true
-            runAsUser: 1001
+            runAsUser: 999
             seccompProfile:
               type: RuntimeDefault
           command:
-            - /bin/bash
+            - redis-server
           args:
-            - -c
-            - /opt/bitnami/scripts/start-scripts/start-master.sh
+            - /etc/redis/redis.conf
+            - --requirepass
+            - $(REDIS_PASSWORD)
           env:
-            - name: BITNAMI_DEBUG
-              value: "false"
-            - name: REDIS_REPLICATION_MODE
-              value: master
-            - name: ALLOW_EMPTY_PASSWORD
-              value: "no"
             - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postiz-redis-secret
                   key: redis-password
-            - name: REDIS_TLS_ENABLED
-              value: "no"
-            - name: REDIS_PORT
-              value: "6379"
           ports:
             - name: redis
               containerPort: 6379
@@ -80,7 +71,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_liveness_local.sh 5
+                - redis-cli -a "$REDIS_PASSWORD" ping | grep -q PONG
           readinessProbe:
             initialDelaySeconds: 20
             periodSeconds: 5
@@ -91,7 +82,7 @@ spec:
               command:
                 - sh
                 - -c
-                - /health/ping_readiness_local.sh 1
+                - redis-cli -a "$REDIS_PASSWORD" ping | grep -q PONG
           resources:
             requests:
               cpu: 10m
@@ -99,33 +90,17 @@ spec:
             limits:
               memory: 192Mi
           volumeMounts:
-            - name: start-scripts
-              mountPath: /opt/bitnami/scripts/start-scripts
-            - name: health
-              mountPath: /health
             - name: redis-data
               mountPath: /data
             - name: config
-              mountPath: /opt/bitnami/redis/mounted-etc
-            - name: empty-dir
-              mountPath: /opt/bitnami/redis/etc/
-              subPath: app-conf-dir
-            - name: empty-dir
+              mountPath: /etc/redis
+            - name: tmp
               mountPath: /tmp
-              subPath: tmp-dir
       volumes:
-        - name: start-scripts
-          configMap:
-            name: postiz-redis-scripts
-            defaultMode: 0755
-        - name: health
-          configMap:
-            name: postiz-redis-health
-            defaultMode: 0755
         - name: config
           configMap:
             name: postiz-redis-configuration
-        - name: empty-dir
+        - name: tmp
           emptyDir: {}
   volumeClaimTemplates:
     - apiVersion: v1

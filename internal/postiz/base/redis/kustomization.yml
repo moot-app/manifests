@@ -4,8 +4,6 @@ kind: Kustomization
 resources:
   - serviceaccount.yml
   - configmap.yml
-  - health-configmap.yml
-  - scripts-configmap.yml
   - service.yml
   - statefulset.yml
   - networkpolicy.yml

@@ -9,11 +9,8 @@ metadata:
     app.kubernetes.io/part-of: postiz
 data:
   redis.conf: |-
-    # Enable AOF https://redis.io/topics/persistence#append-only-file
-    appendonly yes
-    # Disable RDB persistence, AOF persistence already enabled.
-    save ""
-  master.conf: |-
     dir /data
+    appendonly yes
+    save ""
     rename-command FLUSHDB ""
     rename-command FLUSHALL ""
