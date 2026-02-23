@@ -1,0 +1,65 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: evtzt-internal
+configMapGenerator:
+  - name: config-vars
+    literals:
+      - replicas=1
+      - image=ghcr.io/gitroomhq/postiz-app:latest
+      - host=social-test.internal.moot.li
+      - frontend_url=https://social-test.internal.moot.li
+      - backend_url=https://social-test.internal.moot.li/api
+resources:
+  - ../../base
+replacements:
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.replicas
+    targets:
+      - select:
+          kind: Deployment
+          name: postiz
+        fieldPaths:
+          - spec.replicas
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.image
+    targets:
+      - select:
+          kind: Deployment
+          name: postiz
+        fieldPaths:
+          - spec.template.spec.containers.0.image
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.host
+    targets:
+      - select:
+          kind: Ingress
+          name: postiz
+        fieldPaths:
+          - spec.rules.0.host
+          - spec.tls.0.hosts.0
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.frontend_url
+    targets:
+      - select:
+          kind: ConfigMap
+          name: postiz-config
+        fieldPaths:
+          - data.FRONTEND_URL
+  - source:
+      kind: ConfigMap
+      name: config-vars
+      fieldPath: data.backend_url
+    targets:
+      - select:
+          kind: ConfigMap
+          name: postiz-config
+        fieldPaths:
+          - data.NEXT_PUBLIC_BACKEND_URL
