@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: temporal-elasticsearch
+  labels:
+    app.kubernetes.io/name: temporal-elasticsearch
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: elasticsearch
+    app.kubernetes.io/part-of: postiz
+spec:
+  replicas: 1
+  serviceName: temporal-elasticsearch
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: temporal-elasticsearch
+      app.kubernetes.io/component: elasticsearch
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: temporal-elasticsearch
+        app.kubernetes.io/instance: postiz
+        app.kubernetes.io/component: elasticsearch
+        app.kubernetes.io/part-of: postiz
+    spec:
+      containers:
+        - name: elasticsearch
+          image: elasticsearch:7.17.27
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: cluster.routing.allocation.disk.threshold_enabled
+              value: "true"
+            - name: cluster.routing.allocation.disk.watermark.low
+              value: "512mb"
+            - name: cluster.routing.allocation.disk.watermark.high
+              value: "256mb"
+            - name: cluster.routing.allocation.disk.watermark.flood_stage
+              value: "128mb"
+            - name: discovery.type
+              value: "single-node"
+            - name: ES_JAVA_OPTS
+              value: "-Xms256m -Xmx256m"
+            - name: xpack.security.enabled
+              value: "false"
+          ports:
+            - name: http
+              containerPort: 9200
+          resources:
+            requests:
+              cpu: 10m
+              memory: 512Mi
+            limits:
+              memory: 1Gi
+          livenessProbe:
+            tcpSocket:
+              port: 9200
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /_cluster/health
+              port: 9200
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          volumeMounts:
+            - name: es-data
+              mountPath: /usr/share/elasticsearch/data
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: es-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-elasticsearch
+  labels:
+    app.kubernetes.io/name: temporal-elasticsearch
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: elasticsearch
+    app.kubernetes.io/part-of: postiz
+spec:
+  selector:
+    app.kubernetes.io/name: temporal-elasticsearch
+    app.kubernetes.io/component: elasticsearch
+  ports:
+    - name: http
+      port: 9200
+      targetPort: 9200

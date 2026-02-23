@@ -21,3 +21,4 @@ data:
   DISABLE_REGISTRATION: "false"
   RUN_CRON: "true"
   API_LIMIT: "30"
+  TEMPORAL_ADDRESS: "temporal:7233"

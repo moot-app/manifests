@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal
+  labels:
+    app.kubernetes.io/name: temporal
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: temporal
+    app.kubernetes.io/part-of: postiz
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: temporal
+      app.kubernetes.io/component: temporal
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: temporal
+        app.kubernetes.io/instance: postiz
+        app.kubernetes.io/component: temporal
+        app.kubernetes.io/part-of: postiz
+    spec:
+      containers:
+        - name: temporal
+          image: temporalio/auto-setup:1.28.1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB
+              value: "postgres12"
+            - name: DB_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: "temporal-user"
+            - name: POSTGRES_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: temporal-secrets
+                  key: db-password
+            - name: POSTGRES_SEEDS
+              valueFrom:
+                secretKeyRef:
+                  name: temporal-secrets
+                  key: db-host
+            - name: DBNAME
+              value: "temporal-db"
+            - name: VISIBILITY_DBNAME
+              value: "temporal-visibility-db"
+            - name: VISIBILITY_DB
+              value: "postgres12"
+            - name: VISIBILITY_DB_PORT
+              value: "5432"
+            - name: VISIBILITY_POSTGRES_USER
+              value: "temporal-user"
+            - name: VISIBILITY_POSTGRES_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: temporal-secrets
+                  key: db-password
+            - name: VISIBILITY_POSTGRES_SEEDS
+              valueFrom:
+                secretKeyRef:
+                  name: temporal-secrets
+                  key: db-host
+            - name: DYNAMIC_CONFIG_FILE_PATH
+              value: "config/dynamicconfig/development-sql.yaml"
+            - name: ENABLE_ES
+              value: "true"
+            - name: ES_SEEDS
+              value: "temporal-elasticsearch"
+            - name: ES_VERSION
+              value: "v7"
+            - name: TEMPORAL_NAMESPACE
+              value: "default"
+          ports:
+            - name: grpc
+              containerPort: 7233
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+          livenessProbe:
+            tcpSocket:
+              port: 7233
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 7233
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          volumeMounts:
+            - name: dynamicconfig
+              mountPath: /etc/temporal/config/dynamicconfig
+      volumes:
+        - name: dynamicconfig
+          configMap:
+            name: temporal-dynamicconfig
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal
+  labels:
+    app.kubernetes.io/name: temporal
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: temporal
+    app.kubernetes.io/part-of: postiz
+spec:
+  selector:
+    app.kubernetes.io/name: temporal
+    app.kubernetes.io/component: temporal
+  ports:
+    - name: grpc
+      port: 7233
+      targetPort: 7233

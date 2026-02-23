@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-ui
+  labels:
+    app.kubernetes.io/name: temporal-ui
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: temporal-ui
+    app.kubernetes.io/part-of: postiz
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: temporal-ui
+      app.kubernetes.io/component: temporal-ui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: temporal-ui
+        app.kubernetes.io/instance: postiz
+        app.kubernetes.io/component: temporal-ui
+        app.kubernetes.io/part-of: postiz
+    spec:
+      containers:
+        - name: temporal-ui
+          image: temporalio/ui:2.34.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: "temporal:7233"
+            - name: TEMPORAL_CORS_ORIGINS
+              value: "http://localhost:3000"
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-ui
+  labels:
+    app.kubernetes.io/name: temporal-ui
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: temporal-ui
+    app.kubernetes.io/part-of: postiz
+spec:
+  selector:
+    app.kubernetes.io/name: temporal-ui
+    app.kubernetes.io/component: temporal-ui
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080

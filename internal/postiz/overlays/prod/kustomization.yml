@@ -6,9 +6,9 @@ configMapGenerator:
     literals:
       - replicas=2
       - image=ghcr.io/gitroomhq/postiz-app:latest
-      - host=social.internal.moot.li
-      - frontend_url=https://social.internal.moot.li
-      - backend_url=https://social.internal.moot.li/api
+      - host=social.moot.li
+      - frontend_url=https://social.moot.li
+      - backend_url=https://social.moot.li/api
 resources:
   - ../../base
 replacements:
