@@ -1,0 +1,22 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: postiz-redis
+  labels:
+    app.kubernetes.io/name: postiz-redis
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/part-of: postiz
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postiz-redis
+      app.kubernetes.io/component: redis
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 6379

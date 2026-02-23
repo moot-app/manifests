@@ -1,0 +1,15 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: postiz-redis
+  labels:
+    app.kubernetes.io/name: postiz-redis
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/part-of: postiz
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postiz-redis
+      app.kubernetes.io/component: redis
