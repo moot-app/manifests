@@ -22,7 +22,7 @@ data:
   RUN_CRON: "true"
   API_LIMIT: "30"
   TEMPORAL_ADDRESS: "temporal:7233"
-  POSTIZ_GENERIC_OAUTH: "true"
+  POSTIZ_GENERIC_OAUTH: "false"
   POSTIZ_OAUTH_URL: "https://auth.pikol.app"
   POSTIZ_OAUTH_AUTH_URL: "https://auth.pikol.app/realms/identity/protocol/openid-connect/auth"
   POSTIZ_OAUTH_TOKEN_URL: "https://auth.pikol.app/realms/identity/protocol/openid-connect/token"
