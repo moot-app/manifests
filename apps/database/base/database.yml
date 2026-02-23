@@ -17,3 +17,13 @@ spec:
     name: postgres-cluster
   name: api-db
   owner: api-user
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: postiz-db
+spec:
+  cluster:
+    name: postgres-cluster
+  name: postiz-db
+  owner: postiz-user
