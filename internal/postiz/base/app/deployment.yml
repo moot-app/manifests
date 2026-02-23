@@ -59,4 +59,5 @@ spec:
             periodSeconds: 10
       volumes:
         - name: uploads
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: postiz-uploads
