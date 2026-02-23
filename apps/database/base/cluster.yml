@@ -36,6 +36,7 @@ spec:
       - name: postiz-user
         login: true
         superuser: false
+        createdb: true
         ensure: present
         passwordSecret:
           name: postiz-db-credentials
