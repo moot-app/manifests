@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: postiz
+  labels:
+    app.kubernetes.io/name: postiz
+    app.kubernetes.io/instance: postiz
+    app.kubernetes.io/component: app
+    app.kubernetes.io/part-of: postiz
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: xdew-issuer
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - xxx
+      secretName: postiz-tls
+  rules:
+    - host: xxx
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: postiz
+                port:
+                  number: 80
