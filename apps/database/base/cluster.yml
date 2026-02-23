@@ -40,3 +40,10 @@ spec:
         ensure: present
         passwordSecret:
           name: postiz-db-credentials
+      - name: temporal-user
+        login: true
+        superuser: false
+        createdb: true
+        ensure: present
+        passwordSecret:
+          name: temporal-db-credentials

@@ -27,3 +27,23 @@ spec:
     name: postgres-cluster
   name: postiz-db
   owner: postiz-user
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: temporal-db
+spec:
+  cluster:
+    name: postgres-cluster
+  name: temporal-db
+  owner: temporal-user
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: temporal-visibility-db
+spec:
+  cluster:
+    name: postgres-cluster
+  name: temporal-visibility-db
+  owner: temporal-user
