@@ -22,6 +22,10 @@ spec:
         app.kubernetes.io/component: elasticsearch
         app.kubernetes.io/part-of: postiz
     spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
       containers:
         - name: elasticsearch
           image: elasticsearch:7.17.27
