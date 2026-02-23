@@ -29,3 +29,4 @@ data:
   POSTIZ_OAUTH_USERINFO_URL: "https://auth.pikol.app/realms/identity/protocol/openid-connect/userinfo"
   POSTIZ_OAUTH_SCOPE: "openid profile email"
   NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME: "Pikol Identity"
+  NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL: "https://static.pikol.app/img/logo.png"
