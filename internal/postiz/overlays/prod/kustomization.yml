@@ -53,6 +53,7 @@ replacements:
           name: postiz-config
         fieldPaths:
           - data.FRONTEND_URL
+          - data.MAIN_URL
   - source:
       kind: ConfigMap
       name: config-vars
