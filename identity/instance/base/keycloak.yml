@@ -20,7 +20,7 @@ spec:
       key: password
     database: keycloak-db
   hostname:
-    hostname: auth.piko.app
+    hostname: auth.pikol.app
   http:
     httpEnabled: false
     tlsSecret: keycloak-tls
@@ -45,7 +45,7 @@ spec:
     - name: log-level
       value: "INFO"
     - name: cache
-      value: "local"
+      value: "ispn"
   unsupported:
     podTemplate:
       spec:
